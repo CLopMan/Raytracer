@@ -1,12 +1,40 @@
 #include <stdio.h>
 #include "color.h"
 #include "vec3.h"
+#include "ray.h"
+#include <stdbool.h>
+
+bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray) {
+    double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
+    return distance < radius;
+}
+
+Color ray_color(Ray3 ray) {
+    if (ray_hits_sphere(Vec3_fromData(0, 0, -1), 0.5, ray)) {
+        return Color_fromData(1.0, 0.0, 0.0);
+    }
+    return Color_fromData(0.0, 0.0, 0.0);
+}
+
 int main() {
 
-    // Image
 
-    const int image_width = 256;
-    const int image_height = 256;
+    // Image
+    const double aspect_ratio = 16.0 / 9.0;
+    const int image_width = 400;
+    const int image_height = (int) (image_width / aspect_ratio);
+
+    // Camera
+
+    double viewport_height = 2.0;
+    double viewport_width = aspect_ratio * viewport_height;
+    double focal_length = 1.0;
+
+    Vec3 origin = Vec3_fromData(0, 0, 0);
+    Vec3 horizontal = Vec3_fromData(viewport_width, 0, 0);
+    Vec3 vertical = Vec3_fromData(0, viewport_height, 0);
+    Vec3 lower_left_corner = Vec3_sub(Vec3_sub(Vec3_sub(origin, Vec3_times(horizontal, 1/2.0)), Vec3_times(vertical, 1/2.0)), Vec3_fromData(0, 0, focal_length));
+
 
     // Render
 
@@ -14,12 +42,12 @@ int main() {
     for (int j = image_height-1; j >= 0; --j) {        
         fprintf(stderr, "\rScanlines remaining: %i\n", j);
         for (int i = 0; i < image_width; ++i) {
-            double r = i / (double) (image_width-1);
-            double g = j / (double) (image_height-1);
-            double b = 0.5;
-            Color color = Vec3_fromData(r, g, b);
+            double u = i / (double) (image_width-1);
+            double v = j / (double) (image_height-1);
+            Ray3 r = newRay_fromData(origin, Vec3_sub(Vec3_add(Vec3_add(lower_left_corner, Vec3_times(horizontal, u)), Vec3_times(vertical, v)), origin));
+            Color pixel_color = ray_color(r);
 
-            Color_output(stdout, color);
+            Color_output(stdout, pixel_color);
         }
     }
         fprintf(stderr, "\nDone.\n");

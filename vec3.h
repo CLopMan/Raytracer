@@ -37,4 +37,6 @@ double Vec3_lenght(Vec3 self);
 
 double Vec3_lenghtSquared(Vec3 self);
 
+Vec3 unit_v3(Vec3 vector);
+
 #endif

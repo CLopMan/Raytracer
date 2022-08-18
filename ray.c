@@ -8,7 +8,7 @@ Ray3 newRay() {
 
 Ray3 newRay_fromData(Vec3 origin, Vec3 dir) {
     Ray3 ray;
-    ray.dir = dir;
+    ray.dir = unit_v3(dir);
     ray.origin = origin;
     return ray;
 }
