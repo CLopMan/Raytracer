@@ -19,4 +19,6 @@ Vec3 Ray3_dir(Ray3 ray);
 
 Vec3 Ray3_at(Ray3 ray, double t);
 
+double dotLine_distance();
+
 #endif

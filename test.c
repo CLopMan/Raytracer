@@ -1,12 +1,23 @@
 #include <stdio.h>
 #include "color.h"
+#include <math.h>
 #include "vec3.h"
 #include "ray.h"
 #include <stdbool.h>
 
-bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray) {
-    double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
-    return distance < radius;
+double ray_hits_sphere(Vec3 center, double radius, Ray3 ray) {
+    /*double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
+    return distance < radius;*/
+
+    // this is asuming dir is an unitary vector
+    Vec3 roToSphereCenter = Vec3_sub(center, Ray3_origin(ray));
+    double tDistance = Vec3_dotProduct(roToSphereCenter, Ray3_dir(ray));
+    Vec3 t = Vec3_add(Ray3_origin(ray), Vec3_times(Ray3_dir(ray), tDistance));
+    double d = Vec3_lenghtSquared(Vec3_sub(center, t));
+    double x = sqrt(d - radius*radius);
+    return x;
+    
+    
 }
 
 Color ray_color(Ray3 ray) {

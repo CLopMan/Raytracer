@@ -24,3 +24,7 @@ Vec3 Ray3_dir(Ray3 ray) {
 Vec3 Ray3_at(Ray3 ray, double t) {
     return Vec3_add(ray.origin, Vec3_times(ray.dir, t));
 }
+
+double dotLine_distance(Vec3 dot, Ray3 ray) {
+    return Vec3_lenght(Vec3_crossProduct(Vec3_sub(dot, Ray3_origin(ray)), Ray3_dir(ray)));
+}
