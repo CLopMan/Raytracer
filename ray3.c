@@ -1,4 +1,4 @@
-#include "ray.h"
+#include "ray3.h"
 #include "vec3.h"
 
 Ray3 newRay() {

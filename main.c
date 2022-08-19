@@ -2,12 +2,13 @@
 #include "color.h"
 #include <math.h>
 #include "vec3.h"
-#include "ray.h"
+#include "ray3.h"
 #include <stdbool.h>
+#include "sphere.h"
 
-bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* normal) {
-    /*double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
-    return distance < radius;*/
+/*bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* normal) {
+    //double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
+    //return distance < radius;
 
     // this is asuming dir is an unitary vector
     //returns the point of intersection
@@ -29,7 +30,7 @@ bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* no
         fprintf(stderr, "Distance: %f\n", d);
         fprintf(stderr, "x: %f\n", x);
         fprintf(stderr, "interDistance: %f\n", interDistance);
-        fprintf(stderr, "out: %f\n", *out);*/
+        fprintf(stderr, "out: %f\n", *out);
 
         return true;
     }
@@ -38,16 +39,16 @@ bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* no
     //fprintf(stderr, "out: %f\n\n", *out);
     return false;
     
-}
+}*/
 
 
 Color ray_color(Ray3 ray) {
-    double distanceOgToSp;
-    Vec3 normal;
-    if (ray_hits_sphere(Vec3_fromData(0, 0, -1), 0.5, ray, &distanceOgToSp, &normal)) {
+    Sphere sphere = sphere_fromData(Vec3_fromData(0, 0, -1), 0.5);
+    Ray3HitRecord rec;
+    if (sphere_hit(sphere, ray, 0.7, 200.0, &rec)) {
         //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
         //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
-        Color color = Vec3_times(Color_fromData(Vec3_x(normal) + 1, Vec3_y(normal) + 1, Vec3_z(normal) + 1), 0.5);
+        Color color = Vec3_times(Color_fromData(Vec3_x(rec.normal) + 1, Vec3_y(rec.normal) + 1, Vec3_z(rec.normal) + 1), 0.5);
         return color;
     }
     return Color_fromData(0.0, 0.0, 0.0);

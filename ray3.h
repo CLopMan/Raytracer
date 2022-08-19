@@ -1,10 +1,9 @@
 #ifndef RAY3_H
-
-#define RAY3_h
+#define RAY3_H
 
 #include "vec3.h"
 
-typedef struct {
+typedef struct Ray3{
     Vec3 origin;
     Vec3 dir;
 } Ray3;
