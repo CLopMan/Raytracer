@@ -5,24 +5,50 @@
 #include "ray.h"
 #include <stdbool.h>
 
-double ray_hits_sphere(Vec3 center, double radius, Ray3 ray) {
+bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* normal) {
     /*double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
     return distance < radius;*/
 
     // this is asuming dir is an unitary vector
+    //returns the point of intersection
     Vec3 roToSphereCenter = Vec3_sub(center, Ray3_origin(ray));
     double tDistance = Vec3_dotProduct(roToSphereCenter, Ray3_dir(ray));
     Vec3 t = Vec3_add(Ray3_origin(ray), Vec3_times(Ray3_dir(ray), tDistance));
     double d = Vec3_lenghtSquared(Vec3_sub(center, t));
-    double x = sqrt(d - radius*radius);
-    return x;
     
+    if (d < radius*radius) {
+        double x = sqrt((radius*radius - d));
+        double interDistance = tDistance - x;
+        Vec3 intersection = Vec3_add(Ray3_origin(ray), Vec3_times(Ray3_dir(ray), interDistance));
+        *normal = unit_v3(Vec3_sub(intersection, center));
+        *out = tDistance - x;
+
+
+        /*DEBUG
+        fprintf(stderr, "tDistance: %f\n", tDistance);
+        fprintf(stderr, "Distance: %f\n", d);
+        fprintf(stderr, "x: %f\n", x);
+        fprintf(stderr, "interDistance: %f\n", interDistance);
+        fprintf(stderr, "out: %f\n", *out);*/
+
+        return true;
+    }
+
+    *out = -1.0;
+    //fprintf(stderr, "out: %f\n\n", *out);
+    return false;
     
 }
 
+
 Color ray_color(Ray3 ray) {
-    if (ray_hits_sphere(Vec3_fromData(0, 0, -1), 0.5, ray)) {
-        return Color_fromData(1.0, 0.0, 0.0);
+    double distanceOgToSp;
+    Vec3 normal;
+    if (ray_hits_sphere(Vec3_fromData(0, 0, -1), 0.5, ray, &distanceOgToSp, &normal)) {
+        //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
+        //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
+        Color color = Vec3_times(Color_fromData(Vec3_x(normal) + 1, Vec3_y(normal) + 1, Vec3_z(normal) + 1), 0.5);
+        return color;
     }
     return Color_fromData(0.0, 0.0, 0.0);
 }
