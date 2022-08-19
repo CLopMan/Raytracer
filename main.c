@@ -5,61 +5,37 @@
 #include "ray3.h"
 #include <stdbool.h>
 #include "sphere.h"
+#define RESOLUTION 400
 
-/*bool ray_hits_sphere(Vec3 center, double radius, Ray3 ray, double* out, Vec3* normal) {
-    //double distance = Vec3_lenght(Vec3_crossProduct(Vec3_sub(center, Ray3_origin(ray)), Ray3_dir(ray)));
-    //return distance < radius;
-
-    // this is asuming dir is an unitary vector
-    //returns the point of intersection
-    Vec3 roToSphereCenter = Vec3_sub(center, Ray3_origin(ray));
-    double tDistance = Vec3_dotProduct(roToSphereCenter, Ray3_dir(ray));
-    Vec3 t = Vec3_add(Ray3_origin(ray), Vec3_times(Ray3_dir(ray), tDistance));
-    double d = Vec3_lenghtSquared(Vec3_sub(center, t));
-    
-    if (d < radius*radius) {
-        double x = sqrt((radius*radius - d));
-        double interDistance = tDistance - x;
-        Vec3 intersection = Vec3_add(Ray3_origin(ray), Vec3_times(Ray3_dir(ray), interDistance));
-        *normal = unit_v3(Vec3_sub(intersection, center));
-        *out = tDistance - x;
-
-
-        /*DEBUG
-        fprintf(stderr, "tDistance: %f\n", tDistance);
-        fprintf(stderr, "Distance: %f\n", d);
-        fprintf(stderr, "x: %f\n", x);
-        fprintf(stderr, "interDistance: %f\n", interDistance);
-        fprintf(stderr, "out: %f\n", *out);
-
-        return true;
+Color ray_color(Ray3 ray, Sphere* spheres, int len) {
+    double min_p = 200.0;
+    Color color = Color_fromData(0.0, 0.0, 1.0);
+    for (int i = 0; i < len; ++i){
+        Ray3HitRecord rec;
+        if (sphere_hit(spheres[i], ray, 0.0, 200.0, &rec)) {
+            //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
+            //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
+            //fprintf(stderr, "%f\n", rec.distance);
+            if (rec.distance < min_p) {
+                color = Vec3_times(Color_fromData(Vec3_x(rec.normal) + 1, Vec3_y(rec.normal) + 1, Vec3_z(rec.normal) + 1), 0.5);;
+                min_p = rec.distance;
+            }
+        }
     }
-
-    *out = -1.0;
-    //fprintf(stderr, "out: %f\n\n", *out);
-    return false;
-    
-}*/
-
-
-Color ray_color(Ray3 ray) {
-    Sphere sphere = sphere_fromData(Vec3_fromData(0, 0, -1), 0.5);
-    Ray3HitRecord rec;
-    if (sphere_hit(sphere, ray, 0.7, 200.0, &rec)) {
-        //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
-        //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
-        Color color = Vec3_times(Color_fromData(Vec3_x(rec.normal) + 1, Vec3_y(rec.normal) + 1, Vec3_z(rec.normal) + 1), 0.5);
-        return color;
-    }
-    return Color_fromData(0.0, 0.0, 0.0);
+    return color;
 }
 
 int main() {
 
-
+    // lista esferas
+    Sphere spheres[4];
+    spheres[0] = sphere_fromData(Vec3_fromData(0, -0.25, -1.0), 0.3);
+    spheres[1] = sphere_fromData(Vec3_fromData(-0.5, 0.0, -1.5), 0.4);
+    spheres[2] = sphere_fromData(Vec3_fromData(0.3, 0.1, -1.2), 0.35);
+    spheres[3] = sphere_fromData(Vec3_fromData(0.0, -10001.0, -10.0), 10000);
     // Image
     const double aspect_ratio = 16.0 / 9.0;
-    const int image_width = 400;
+    const int image_width = RESOLUTION;
     const int image_height = (int) (image_width / aspect_ratio);
 
     // Camera
@@ -83,7 +59,7 @@ int main() {
             double u = i / (double) (image_width-1);
             double v = j / (double) (image_height-1);
             Ray3 r = newRay_fromData(origin, Vec3_sub(Vec3_add(Vec3_add(lower_left_corner, Vec3_times(horizontal, u)), Vec3_times(vertical, v)), origin));
-            Color pixel_color = ray_color(r);
+            Color pixel_color = ray_color(r, spheres, 4);
 
             Color_output(stdout, pixel_color);
         }
