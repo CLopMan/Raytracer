@@ -6,7 +6,7 @@ Camera Camera_new() {
     double aspect_ratio = 16.0 / 9.0;
     double viewport_height = 2.0;
     double viewport_width = aspect_ratio * viewport_height;
-    double focal_length = 1.0;
+    double focal_length = 2.0;
 
     Camera camera;
     camera.origin = Vec3_fromData(0.0, 0.0, 0.0);

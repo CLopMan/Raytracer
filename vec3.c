@@ -101,5 +101,5 @@ Vec3 Vec3_random_unit_vector() {
         out = Vec3_random_min_max(0.0, 2.0);
         out = Vec3_sub(out, Vec3_fromData(1.0, 1.0, 1.0));
     } while (Vec3_lenghtSquared(out) > 1);
-    return out;
+    return unit_v3(out);
 }

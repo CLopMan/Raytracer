@@ -20,7 +20,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len, int rebotes) {
     closest.distance = 999999999.0;
     for (int i = 0; i < len; ++i){
         Ray3HitRecord rec;
-        if (sphere_hit(spheres[i], ray, 0.0, 200.0, &rec)) {
+        if (sphere_hit(spheres[i], ray, 0.001, 200.0, &rec)) {
             //fprintf(stderr, "%i\n", i);
             //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
             //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
@@ -48,10 +48,10 @@ int main() {
     const int samples_per_pixel = 64;
     // lista esferas
     Sphere spheres[ARRAY_LEN];
-    spheres[0] = sphere_fromData(Vec3_fromData(0.0, -10001.0, 0.0), 10000.0);
-    spheres[1] = sphere_fromData(Vec3_fromData(0.0, 0, -3.5), 1.0);
-    spheres[2] = sphere_fromData(Vec3_fromData(1.9, -1.0, -2.5), 1.5);
-    spheres[3] = sphere_fromData(Vec3_fromData(1.0, 0.0, -1.5), 0.4);
+    spheres[0] = sphere_fromData(Vec3_fromData(-1.0, -10001.0, -2.0), 10000.0);
+    spheres[1] = sphere_fromData(Vec3_fromData(-1.0, 0, -5.5), 1.0);
+    spheres[2] = sphere_fromData(Vec3_fromData(0.9, -1.0, -4.5), 1.5);
+    spheres[3] = sphere_fromData(Vec3_fromData(0.0, 0.0, -3.5), 0.4);
     // Image
     const double aspect_ratio = 16.0 / 9.0;
     const int image_width = RESOLUTION;
