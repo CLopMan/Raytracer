@@ -103,3 +103,11 @@ Vec3 Vec3_random_unit_vector() {
     } while (Vec3_lenghtSquared(out) > 1);
     return unit_v3(out);
 }
+
+Vec3 Vec3_random_in_hemisphere(Vec3 normal) {
+    Vec3 out = Vec3_random_unit_vector();
+    if (Vec3_dotProduct(normal, out) > 0.0) {
+        return Vec3_times(out, -1);
+    } 
+    return out;
+}

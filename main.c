@@ -8,7 +8,7 @@
 #include "camera.h"
 
 
-#define RESOLUTION 600
+#define RESOLUTION 400
 #define ARRAY_LEN 4
 #define REBOTES 32
 #define GAMMA 1/2.0
@@ -37,7 +37,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len, int rebotes) {
             return Color_fromData(0.0, 0.0, 0.0);
         }
         Ray3 r;
-        Vec3 newDir = Vec3_add(closest.normal, Vec3_random_unit_vector());
+        Vec3 newDir = Vec3_add(closest.normal, Vec3_random_in_hemisphere(closest.normal));
         r = newRay_fromData(closest.point, newDir);
         return Vec3_times(ray_color(r, spheres, ARRAY_LEN, rebotes - 1), 0.5);
     }

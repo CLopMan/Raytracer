@@ -45,4 +45,6 @@ Vec3 Vec3_random_min_max(double min, double max);
 
 Vec3 Vec3_random_unit_vector();
 
+Vec3 Vec3_random_in_hemisphere(Vec3 normal);
+
 #endif
