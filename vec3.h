@@ -39,4 +39,10 @@ double Vec3_lenghtSquared(Vec3 self);
 
 Vec3 unit_v3(Vec3 vector);
 
+Vec3 Vec3_random();
+
+Vec3 Vec3_random_min_max(double min, double max);
+
+Vec3 Vec3_random_unit_vector();
+
 #endif

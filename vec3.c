@@ -1,5 +1,6 @@
 #include "vec3.h"
 #include <math.h>
+#include "random.h"
 
 Vec3 Vec3_new() {
     Vec3 vector;
@@ -84,4 +85,21 @@ double Vec3_lenght(Vec3 self) {
 
 double Vec3_lenghtSquared(Vec3 self) {
     return self.x*self.x + self.y*self.y + self.z*self.z;
+}
+
+Vec3 Vec3_random() {
+    return Vec3_fromData(random_double(), random_double(), random_double());
+}
+
+Vec3 Vec3_random_min_max(double min, double max) {
+    return Vec3_fromData(random_min_max(min, max), random_min_max(min, max), random_min_max(min, max));
+}
+
+Vec3 Vec3_random_unit_vector() {
+    Vec3 out;
+    do {
+        out = Vec3_random_min_max(0.0, 2.0);
+        out = Vec3_sub(out, Vec3_fromData(1.0, 1.0, 1.0));
+    } while (Vec3_lenghtSquared(out) > 1);
+    return out;
 }
