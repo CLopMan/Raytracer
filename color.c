@@ -1,4 +1,5 @@
 #include "Color.h"
+#include <math.h>
 
 Color Color_new() {
 	return Vec3_new();
@@ -38,4 +39,11 @@ void Color_output(FILE* stream, Color color) {
 		(int) (255.999 * color.y),
 		(int) (255.999 * color.z)
 	);
+}
+
+Color Color_gamma_correction(Color self, double gamma) {
+	self.x = pow(self.x, gamma);
+	self.y = pow(self.y, gamma);
+	self.z = pow(self.z, gamma);
+	return self;
 }

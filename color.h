@@ -25,4 +25,6 @@ Color Color_setB(Color color, double b);
 
 void Color_output(FILE* stream, Color color);
 
+Color Color_gamma_correction(Color self, double gamma);
+
 #endif
