@@ -5,7 +5,8 @@
 #include "ray3.h"
 #include <stdbool.h>
 #include "sphere.h"
-#define RESOLUTION 400
+#include "camera.h"
+#define RESOLUTION 1280
 
 Color ray_color(Ray3 ray, Sphere* spheres, int len) {
     double min_p = 200.0;
@@ -13,6 +14,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len) {
     for (int i = 0; i < len; ++i){
         Ray3HitRecord rec;
         if (sphere_hit(spheres[i], ray, 0.0, 200.0, &rec)) {
+            //fprintf(stderr, "%i\n", i);
             //return Color_fromData(distanceOgToSp/(double) 1, 0.0, 0.0);
             //fprintf(stderr, "%f %f %f\n", normal.x, normal.y, normal.z);
             //fprintf(stderr, "%f\n", rec.distance);
@@ -26,7 +28,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len) {
 }
 
 int main() {
-
+    const int samples_per_pixel = 64;
     // lista esferas
     Sphere spheres[4];
     spheres[0] = sphere_fromData(Vec3_fromData(0, -0.25, -1.0), 0.3);
@@ -39,16 +41,8 @@ int main() {
     const int image_height = (int) (image_width / aspect_ratio);
 
     // Camera
-
-    double viewport_height = 2.0;
-    double viewport_width = aspect_ratio * viewport_height;
-    double focal_length = 1.0;
-
-    Vec3 origin = Vec3_fromData(0, 0, 0);
-    Vec3 horizontal = Vec3_fromData(viewport_width, 0, 0);
-    Vec3 vertical = Vec3_fromData(0, viewport_height, 0);
-    Vec3 lower_left_corner = Vec3_sub(Vec3_sub(Vec3_sub(origin, Vec3_times(horizontal, 1/2.0)), Vec3_times(vertical, 1/2.0)), Vec3_fromData(0, 0, focal_length));
-
+    Camera camera;
+    camera = Camera_new();
 
     // Render
 
@@ -56,12 +50,16 @@ int main() {
     for (int j = image_height-1; j >= 0; --j) {        
         fprintf(stderr, "\rScanlines remaining: %i\n", j);
         for (int i = 0; i < image_width; ++i) {
-            double u = i / (double) (image_width-1);
-            double v = j / (double) (image_height-1);
-            Ray3 r = newRay_fromData(origin, Vec3_sub(Vec3_add(Vec3_add(lower_left_corner, Vec3_times(horizontal, u)), Vec3_times(vertical, v)), origin));
-            Color pixel_color = ray_color(r, spheres, 4);
-
-            Color_output(stdout, pixel_color);
+            Color color_pixel = Color_fromData(0.0, 0.0, 0.0);
+            for (int k = 0; k < samples_per_pixel; ++k) {
+                double u = (i + random_double()) / (double) (image_width-1);
+                double v = (j + random_double()) / (double) (image_height-1);
+                //fprintf(stderr, " %f %f\n", u, v);
+                Ray3 r = get_ray(camera, u, v);
+                color_pixel = Vec3_add(color_pixel, ray_color(r, spheres, 4));
+            }
+            color_pixel = Vec3_times(color_pixel, 1/(double) samples_per_pixel);
+            Color_output(stdout, color_pixel);
         }
     }
         fprintf(stderr, "\nDone.\n");
