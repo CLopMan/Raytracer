@@ -8,7 +8,7 @@
 typedef struct Sphere {
     Vec3 center;
     double radius;
-} Sphere;
+    } Sphere;
 
 typedef struct Ray3HitRecord {
     Vec3 point;
