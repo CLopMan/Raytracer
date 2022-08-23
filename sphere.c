@@ -1,13 +1,15 @@
 #include "sphere.h"
 #include "ray3.h"
 #include "vec3.h"
+#include "color.h"
 #include "math.h"
 #include <stdbool.h>
 
-Sphere sphere_fromData(Vec3 center, double radius) {
+Sphere sphere_fromData(Vec3 center, double radius, Color color) {
     Sphere sphere;
     sphere.center = center;
     sphere.radius = radius;
+    sphere.color = color;
     return sphere;
 }
 

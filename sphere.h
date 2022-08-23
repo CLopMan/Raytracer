@@ -3,11 +3,13 @@
 
 #include "ray3.h"
 #include "vec3.h"
+#include "color.h"
 #include <stdbool.h>
 
 typedef struct Sphere {
     Vec3 center;
     double radius;
+    Color color;
     } Sphere;
 
 typedef struct Ray3HitRecord {
@@ -16,7 +18,7 @@ typedef struct Ray3HitRecord {
     double distance;
 } Ray3HitRecord;
 
-Sphere sphere_fromData(Vec3 center, double radius);
+Sphere sphere_fromData(Vec3 center, double radius, Color color);
 
 Vec3 sphere_center(Sphere self);
 

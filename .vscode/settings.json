@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "material.h": "c"
+        "material.h": "c",
+        "color.h": "c",
+        "stdio.h": "c"
     }
 }
