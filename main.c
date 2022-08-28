@@ -14,10 +14,11 @@
 #define GAMMA 1/2.0
 
 Color ray_color(Ray3 ray, Sphere* spheres, int len, int rebotes) {
-    Color color = Color_fromData(232.0/255.9999, 217.0/255.9999, 217.0/255.9999);
+    Color color = Color_fromData(1.0, 1.0, 1.0);
     bool hitDeteted = false;
     Ray3HitRecord closest;
     closest.distance = 999999999.0;
+    Vec3 sphere_color;
     for (int i = 0; i < len; ++i){
         Ray3HitRecord rec;
         if (sphere_hit(spheres[i], ray, 0.001, 200.0, &rec)) {
@@ -29,6 +30,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len, int rebotes) {
             if (rec.distance < closest.distance) {
                 //color = Vec3_times(Color_fromData(Vec3_x(rec.normal) + 1, Vec3_y(rec.normal) + 1, Vec3_z(rec.normal) + 1), 0.5);
                 closest = rec;
+                sphere_color = spheres[i].weights;
             }
         }
     }
@@ -39,7 +41,7 @@ Color ray_color(Ray3 ray, Sphere* spheres, int len, int rebotes) {
         Ray3 r;
         Vec3 newDir = Vec3_add(closest.normal, Vec3_random_in_hemisphere(closest.normal));
         r = newRay_fromData(closest.point, newDir);
-        return Vec3_times(ray_color(r, spheres, ARRAY_LEN, rebotes - 1), 0.5);
+        return Vec3_times(Vec3_coordinates_product(ray_color(r, spheres, ARRAY_LEN, rebotes - 1), sphere_color), 0.5);
     }
     return color;
 }
@@ -48,10 +50,10 @@ int main() {
     const int samples_per_pixel = 64;
     // lista esferas
     Sphere spheres[ARRAY_LEN];
-    spheres[0] = sphere_fromData(Vec3_fromData(-1.0, -10001.0, -2.0), 10000.0);
-    spheres[1] = sphere_fromData(Vec3_fromData(-1.0, 0, -5.5), 1.0);
-    spheres[2] = sphere_fromData(Vec3_fromData(0.9, -1.0, -4.5), 1.5);
-    spheres[3] = sphere_fromData(Vec3_fromData(0.0, 0.0, -3.5), 0.4);
+    spheres[0] = sphere_fromData(Vec3_fromData(-1.0, -10001.0, -2.0), 10000.0, Vec3_fromData(1.0, 1.0, 0.0));
+    spheres[1] = sphere_fromData(Vec3_fromData(-1.0, 0, -5.5), 1.0, Vec3_fromData(1.0, 0.0, 0.0));
+    spheres[2] = sphere_fromData(Vec3_fromData(0.9, -1.0, -4.5), 1.5, Vec3_fromData(0.0, 1.0, 0.0));
+    spheres[3] = sphere_fromData(Vec3_fromData(0.0, 0.0, -3.5), 0.4, Vec3_fromData(0.0, 0.0, 1.0));
     // Image
     const double aspect_ratio = 16.0 / 9.0;
     const int image_width = RESOLUTION;

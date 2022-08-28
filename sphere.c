@@ -4,10 +4,11 @@
 #include "math.h"
 #include <stdbool.h>
 
-Sphere sphere_fromData(Vec3 center, double radius) {
+Sphere sphere_fromData(Vec3 center, double radius, Vec3 weights) {
     Sphere sphere;
     sphere.center = center;
     sphere.radius = radius;
+    sphere.weights = weights;
     return sphere;
 }
 

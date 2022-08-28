@@ -111,3 +111,10 @@ Vec3 Vec3_random_in_hemisphere(Vec3 normal) {
     } 
     return out;
 }
+
+Vec3 Vec3_coordinates_product(Vec3 self, Vec3 other) {
+    self.x = self.x * other.x;
+    self.y = self.y * other.y;
+    self.z = self.z * other.z;
+    return self;
+}

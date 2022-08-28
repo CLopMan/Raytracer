@@ -8,6 +8,7 @@
 typedef struct Sphere {
     Vec3 center;
     double radius;
+    Vec3 weights;
     } Sphere;
 
 typedef struct Ray3HitRecord {
@@ -16,7 +17,7 @@ typedef struct Ray3HitRecord {
     double distance;
 } Ray3HitRecord;
 
-Sphere sphere_fromData(Vec3 center, double radius);
+Sphere sphere_fromData(Vec3 center, double radius, Vec3 weights);
 
 Vec3 sphere_center(Sphere self);
 

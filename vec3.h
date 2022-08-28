@@ -47,4 +47,6 @@ Vec3 Vec3_random_unit_vector();
 
 Vec3 Vec3_random_in_hemisphere(Vec3 normal);
 
+Vec3 Vec3_coordinates_product(Vec3 self, Vec3 other);
+
 #endif
