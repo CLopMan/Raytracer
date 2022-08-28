@@ -1,7 +1,7 @@
 #include "sphere.h"
 #include "ray3.h"
 #include "vec3.h"
-#include "math.h"
+#include <math.h>
 #include <stdbool.h>
 
 Sphere sphere_fromData(Vec3 center, double radius, Vec3 weights) {
