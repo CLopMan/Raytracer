@@ -54,7 +54,7 @@ int main() {
     spheres[1] = sphere_fromData(Vec3_fromData(-1.0, 0, -5.5), 1.0, Vec3_fromData(1.0, 0.0, 0.0));
     spheres[2] = sphere_fromData(Vec3_fromData(0.9, -1.0, -4.5), 1.5, Vec3_fromData(0.0, 1.0, 0.0));
     spheres[3] = sphere_fromData(Vec3_fromData(0.0, 0.0, -3.5), 0.4, Vec3_fromData(0.0, 0.0, 1.0));
-    spheres[4] = sphere_fromData(Vec3_fromData(-1.0, -0.7, -3.5), 0.3, Vec3_fromData(0.5, 0.1, 0.3));
+    spheres[4] = sphere_fromData(Vec3_fromData(-1.0, -0.7, -3.5), 0.3, Vec3_fromData(0.4, 0.8, 0.6));
     // Image
     const double aspect_ratio = 16.0 / 9.0;
     const int image_width = RESOLUTION;
